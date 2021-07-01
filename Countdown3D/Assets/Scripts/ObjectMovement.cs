@@ -17,6 +17,8 @@ public class ObjectMovement : MonoBehaviour
 
     [Header("X Axis Movement")]
     public bool xMovement;
+
+    public bool xReverse;
     
     public float xMin;
     public float xMax;
@@ -34,6 +36,8 @@ public class ObjectMovement : MonoBehaviour
         
     public bool moveForward;
     public bool moveBackward;
+    
+    
     
 
 

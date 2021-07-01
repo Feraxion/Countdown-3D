@@ -9,7 +9,7 @@ public class MultipliedBall : MonoBehaviour
     public float speed;
     public Rigidbody rb;
     public bool canMultiply;
-    
+    public bool threex, fourx;
     
     
     
@@ -18,11 +18,12 @@ public class MultipliedBall : MonoBehaviour
     {
         rb = gameObject.GetComponent<Rigidbody>();
         StartCoroutine(BulletMultiply());
+        rb.useGravity = true;
     }
 
     void Update () {
          
-        rb.MovePosition(transform.position + (Time.deltaTime * speed * Vector3.up));
+        //rb.MovePosition(transform.position + (Time.deltaTime * speed * Vector3.up));
              
              
              
@@ -44,29 +45,55 @@ public class MultipliedBall : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.CompareTag("4x"))
         {
-            if (canMultiply)
+            if (canMultiply && fourx)
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    Instantiate(bullet, transform.position, Quaternion.identity);
+                    //Instantiate(bullet, transform.position, Quaternion.identity);
+                    var bulletMu = Instantiate(bullet, transform.position + (new Vector3(-0.2f * i,0.2f,0)), Quaternion.identity);
+                    bulletMu.GetComponent<MultipliedBall>().fourx = false;
                 }
 
-                canMultiply = false;
+                //canMultiply = false;
 
-                StartCoroutine(BulletMultiply());
+                //StartCoroutine(BulletMultiply());
+            }
+            
+        }    
+        
+        if (other.gameObject.CompareTag("3x"))
+        {
+            if (canMultiply & threex)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    var bulletMu = Instantiate(bullet, transform.position + (new Vector3(-0.2f * i,0.2f,0)), Quaternion.identity);
+                    bulletMu.GetComponent<MultipliedBall>().threex = false;
+                    
+
+
+
+                }
+
+                //canMultiply = false;
+
+                //StartCoroutine(BulletMultiply());
             }
             
         }    
     }
     
+    
+    
     IEnumerator BulletMultiply()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1f);
         canMultiply = true;
+        
     }
     
    

@@ -29,7 +29,9 @@ public class Player : MonoBehaviour
         startPosition = transform.position;
         attack = false;
         isShoot = false;
-        canMultiply = true;
+
+        StartCoroutine(BulletMultiply());
+        rb.useGravity = false;
 
     }
 
@@ -39,7 +41,8 @@ public class Player : MonoBehaviour
 
              if (attack)
              {
-                 rb.MovePosition(transform.position + (Time.deltaTime * speed * Vector3.up));
+                // rb.MovePosition(transform.position + (Time.deltaTime * speed * Vector3.up));
+                 rb.useGravity = true;
              }
              
              
@@ -97,7 +100,7 @@ public class Player : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.CompareTag("4x"))
         {
@@ -105,7 +108,23 @@ public class Player : MonoBehaviour
             {
                 for (int i = 0; i < 4; i++)
                 { 
-                    Instantiate(bullet, transform.position + (new Vector3(-0.4f * i,-0.4f,0)), Quaternion.identity);
+                    Instantiate(bullet, transform.position + (new Vector3(-0.2f * i,-0.2f,0)), Quaternion.identity);
+                }
+
+                canMultiply = false;
+
+                StartCoroutine(BulletMultiply());
+            }
+            
+        }    
+        
+        if (other.gameObject.CompareTag("3x"))
+        {
+            if (canMultiply)
+            {
+                for (int i = 0; i < 3; i++)
+                { 
+                    Instantiate(bullet, transform.position + (new Vector3(-0.2f * i,-0.2f,0)), Quaternion.identity);
                 }
 
                 canMultiply = false;
@@ -124,7 +143,7 @@ public class Player : MonoBehaviour
     
     IEnumerator SpawnBottomAmmo()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
         Instantiate(bulletInactive, startPosition, Quaternion.identity);
     }
 }
